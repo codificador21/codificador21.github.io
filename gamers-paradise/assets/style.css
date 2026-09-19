@@ -960,12 +960,12 @@ input[type=range]::-webkit-slider-thumb:active{ transform:scale(1.2); cursor:gra
 .demo-bar b{ color:#fff3dc; font-weight:600; }
 .demo-bar a{ color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
 
-body.has-demo-bar .nav{ top:36px; }
-body.has-demo-bar{ padding-top:36px; }
+/* --bar-h is measured in app.js; 36px is only the pre-script fallback. */
+body.has-demo-bar .nav{ top:var(--bar-h,36px); }
+body.has-demo-bar{ padding-top:var(--bar-h,36px); }
 @media (max-width:700px){
-  .demo-bar{ font-size:.68rem; padding-block:7px; }
-  body.has-demo-bar .nav{ top:48px; }
-  body.has-demo-bar{ padding-top:48px; }
+  .demo-bar{ font-size:.7rem; padding-block:8px; text-align:left; gap:8px; }
+  .demo-bar__more{ display:none; }   /* phones get the short sentence */
 }
 
 /* Rate cards with no confirmed number yet ---------------------------------- */
@@ -1006,3 +1006,77 @@ body.has-demo-bar{ padding-top:36px; }
   font-size:.76rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan);
 }
 @media (max-width:900px){ .hub{ grid-template-columns:1fr; } }
+
+
+/* ==========================================================================
+   Phones — measured against a 380px viewport, not guessed at
+   ========================================================================== */
+@media (max-width:620px){
+  /* Nav: the business name is long, and it shares the row with the burger. */
+  .nav__inner{ height:62px; gap:12px; }
+  .nav__logo svg{ width:29px; height:29px; }
+  .nav__logo b{ font-size:.86rem; letter-spacing:.1em; }
+  .nav__logo span span{ font-size:.5rem; letter-spacing:.18em; }
+  .burger{ width:40px; height:40px; margin-right:-8px; }
+
+  .mobile-menu{ inset:calc(var(--bar-h,36px) + 62px) 0 0; }
+  .mobile-menu a{ font-size:1.32rem; padding-block:12px; }
+
+  /* Hero: shrink the display type so the longest line still fits one row. */
+  .hero{ padding-top:26px; padding-bottom:44px; min-height:0; }
+  .hero h1{ font-size:clamp(2.05rem,9.4vw,3rem); }
+  .hero__sub{ margin-bottom:26px; }
+  .scroll-cue{ display:none; }
+
+  /* Full-width CTAs beat two ragged half-width pills on a phone. */
+  .hero__actions{ flex-direction:column; align-items:stretch; gap:10px; }
+  .hero__actions .btn,
+  .cta__btns .btn{ width:100%; }
+  .cta__btns{ flex-direction:column; align-items:stretch; }
+  .btn{ min-height:48px; }           /* comfortable tap target */
+  .btn--lg{ padding-block:15px; }
+
+  .hero__card{ max-width:none; }
+  .hero__card-body .price{ font-size:1.9rem; }
+
+  section.section{ padding-block:clamp(52px,11vw,72px); }
+  .section-head{ margin-bottom:30px; }
+
+  /* Tables: keep the number hard against the right edge and readable. */
+  .rt__head{ padding:16px 18px; }
+  .rt th, .rt td{ padding:14px 18px; }
+  .rt .val, .rate-ph{ font-size:1.12rem; }
+  .rt__note, .rt__ph-note{ padding:13px 18px; }
+
+  .rulebox, .listbox, .plan, .value, .info__card{ padding:24px 20px; }
+  .faq summary{ padding:16px 46px 16px 18px; font-size:.95rem; }
+  .faq summary::after{ right:18px; }
+  .faq .faq__a{ padding:0 18px 18px; }
+
+  .gallery figure{ width:76vw; }     /* one photo at a time reads better */
+  .gallery__row--b{ margin-top:12px; }
+
+  .footer__top{ gap:26px; }
+  .footer__cols{ gap:26px 34px; }
+  .footer__bottom{ font-size:.75rem; }
+
+  .fab{ right:14px; bottom:14px; width:52px; height:52px; }
+  .fab svg{ width:25px; height:25px; }
+}
+
+/* Touch devices: drop the effects that cost battery and buy nothing without
+   a hovering pointer. */
+@media (hover:none),(pointer:coarse){
+  #particles{ display:none; }
+  .hero__bg{ animation:none; transform:scale(1.04); }
+  .fx__hex{ animation:none; }
+  .fx__aurora{ animation:none; }
+  .value:hover::before{ animation:none; }
+  *{ -webkit-tap-highlight-color:transparent; }
+}
+
+/* Landing page, phone widths */
+@media (max-width:620px){
+  .contact a, .contact div{ padding:20px 18px; }
+  .how li{ font-size:.93rem; }
+}

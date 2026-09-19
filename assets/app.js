@@ -63,6 +63,23 @@ function applyConfig () {
 }
 
 /* --------------------------------------------------------------------------
+   1b. Demo bar height — measured, not assumed
+   The disclaimer wraps to a different number of lines at every width, so the
+   fixed nav and the body offset are driven off its real height.
+   -------------------------------------------------------------------------- */
+function demoBar () {
+  const bar = $('.demo-bar');
+  if (!bar) return;
+  const sync = () => {
+    document.documentElement.style.setProperty('--bar-h', bar.offsetHeight + 'px');
+  };
+  sync();
+  addEventListener('resize', sync, { passive: true });
+  addEventListener('orientationchange', () => setTimeout(sync, 150));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+}
+
+/* --------------------------------------------------------------------------
    2. Preloader
    -------------------------------------------------------------------------- */
 function preloader () {
@@ -229,13 +246,17 @@ function countUp (el) {
   const suffix = el.dataset.suffix || '';
   if (reduced) { el.textContent = prefix + target.toLocaleString('en-IN') + suffix; return; }
   const dur = 1500;
-  const t0 = performance.now();
-  (function step (t) {
-    const p = Math.min(1, (t - t0) / dur);
+  // The first rAF timestamp can precede performance.now(), which made progress
+  // briefly negative and rendered "-0" / "₹-1". Take t0 from the first frame.
+  let t0 = null;
+  el.textContent = prefix + '0' + suffix;
+  requestAnimationFrame(function step (t) {
+    if (t0 === null) t0 = t;
+    const p = Math.min(1, Math.max(0, (t - t0) / dur));
     const eased = 1 - Math.pow(1 - p, 3);
     el.textContent = prefix + Math.round(target * eased).toLocaleString('en-IN') + suffix;
     if (p < 1) requestAnimationFrame(step);
-  })(t0);
+  });
 }
 
 /* --------------------------------------------------------------------------
@@ -453,6 +474,7 @@ function ripple () {
    -------------------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
   applyConfig();
+  demoBar();
   preloader();
   cursor();
   particles();
