@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /gamers-paradise/
+Disallow: /infinity-gaming-zone/
+Disallow: /playstation-hub/
