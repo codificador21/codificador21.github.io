@@ -1023,7 +1023,9 @@ body.has-demo-bar{ padding-top:var(--bar-h,36px); }
   .mobile-menu a{ font-size:1.32rem; padding-block:12px; }
 
   /* Hero: shrink the display type so the longest line still fits one row. */
-  .hero{ padding-top:26px; padding-bottom:44px; min-height:0; }
+  /* The nav is fixed, so it takes no flow space: the hero must clear its
+     62px itself. The body already carries the bar's height. */
+  .hero{ padding-top:88px; padding-bottom:44px; min-height:0; }
   .hero h1{ font-size:clamp(2.05rem,9.4vw,3rem); }
   .hero__sub{ margin-bottom:26px; }
   .scroll-cue{ display:none; }
